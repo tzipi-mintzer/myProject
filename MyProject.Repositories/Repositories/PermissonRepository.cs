@@ -1,4 +1,5 @@
-﻿using MyProject.Repositories.Entities;
+﻿using Microsoft.EntityFrameworkCore;
+using MyProject.Repositories.Entities;
 using MyProject.Repositories.Interfaces;
 using System;
 using System.Collections.Generic;
@@ -8,42 +9,44 @@ using System.Threading.Tasks;
 
 namespace MyProject.Repositories.Repositories
 {
-   public class PermissonRepository : IpermissionRepository
+    public class PermissionRepository : IPermissionRepository
     {
         private readonly IContext _context;
 
-        public PermissonRepository(IContext context)
+        public PermissionRepository(IContext context)
         {
             _context = context;
         }
 
-        public Permission Add(int id, string name, string description)
+        public async Task<Permission> AddAsync(int id, string name, string description)
         {
-            Permission p = new Permission() { Id = id, Name = name, Description = description };
-            _context.Permissions.Add(p);
-            return p;
+            var p = _context.Permissions.Add(new Permission() { Id = id, Name = name, Description = description });
+            await _context.SaveGangesAsync();
+            return p.Entity;
         }
 
-        public void Delete(int id)
+        public async Task DeleteAsync(int id)
         {
-            _context.Permissions.Remove(GetById(id));
+            _context.Permissions.Remove(GetByIdAsync(id).Result);
+            await _context.SaveGangesAsync();
         }
 
-        public List<Permission> GetAll()
+        public async Task<List<Permission>> GetAllAsync()
         {
-            return _context.Permissions;
+            return await _context.Permissions.ToListAsync();
         }
 
-        public Permission GetById(int id)
+        public async Task<Permission> GetByIdAsync(int id)
         {
-            return _context.Permissions.Find(r => r.Id == id);
+            return await _context.Permissions.FindAsync(id);
         }
 
-        public Permission Update(Permission Permission)
+        public async Task<Permission> UpdateAsync(Permission Permission)
         {
-            Permission r1 = GetById(Permission.Id);
+            Permission r1 = GetByIdAsync(Permission.Id).Result;
             r1.Name = Permission.Name;
             r1.Description = Permission.Description;
+            await _context.SaveGangesAsync();
             return r1;
         }
     }

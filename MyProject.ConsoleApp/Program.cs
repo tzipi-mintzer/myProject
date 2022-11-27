@@ -13,7 +13,7 @@ namespace MyProject.ConsoleApp
 
 
             var mock = new MockContext();
-           // var db = new DbContext();
+         //   var db = new DbContext();
             mock.Roles.ForEach(r =>
             {
                 Console.WriteLine(r.ToString());

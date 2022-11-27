@@ -7,6 +7,7 @@ using MyProject.Repositories.Repositories;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+
 using System.Threading.Tasks;
 
 namespace MyProject.webAPI.Controllers
@@ -15,20 +16,18 @@ namespace MyProject.webAPI.Controllers
     [ApiController]
     public class ClaimController : ControllerBase
     {
-        private readonly IclaimRepository _claimRepository;
-        public ClaimController()
-        {
-            var mock = new MockContext();
-            _claimRepository = new ClaimRepository(mock);
-        }
+        private readonly IClaimRepository _claimRepository;
+   
 
+        public ClaimController(IClaimRepository claimRepository)
+        {
+            _claimRepository = claimRepository;
+        }
         [HttpGet]
-    
         public List<Claim> Get()
         {
             return _claimRepository.GetAll();
         }
-
         [HttpGet("{id}")]
         public Claim Get(int id)
         {

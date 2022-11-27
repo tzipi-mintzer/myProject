@@ -4,6 +4,7 @@ using MyProject.Mock;
 using MyProject.Repositories.Entities;
 using MyProject.Repositories.Interfaces;
 using MyProject.Repositories.Repositories;
+using MyProject.Services.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,23 +16,33 @@ namespace MyProject.webAPI.Controllers
     [ApiController]
     public class PermissionController : ControllerBase
     {
-        private readonly IpermissionRepository _permissionRepository;
-        public PermissionController()
+        private readonly IPermissionService _permissionService;
+        public PermissionController(IPermissionService permissionService)
         {
-            var mock = new MockContext();
-            _permissionRepository = new PermissonRepository(mock);
+
+            _permissionService = permissionService;
         }
         [HttpGet]
-        public List<Permission> Get()
+        public async Task<List<Permission>> Get()
         {
-            return _permissionRepository.GetAll();
+            return await _permissionService.GetAllAsync();
         }
-
         [HttpGet("{id}")]
-        public Permission Get(int id)
+        public async Permission Get(int id)
         {
-            return _permissionRepository.GetById(id);
+            return _permissionService.GetById(id);
         }
-
+        [HttpPut]
+        public async Task<Role> Update([FromBody] RoleModel model)
+        {
+            return await _roleService.UpdateAsync(new Role() { Id = model.Id, Name = model.Name, Description = model.Description });
+        }
+        [HttpPost]
+        public async Task<Role> Post([FromBody] RoleModel model)
+        {
+            Role r = await _roleService.AddAsync(model.Id, model.Name, model.Description);
+            return r;
+        }
     }
 }
+

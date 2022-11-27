@@ -1,4 +1,5 @@
-﻿using MyProject.Repositories.Entities;
+﻿using Microsoft.EntityFrameworkCore;
+using MyProject.Repositories.Entities;
 using MyProject.Repositories.Interfaces;
 using System;
 using System.Collections.Generic;
@@ -8,46 +9,44 @@ using System.Threading.Tasks;
 
 namespace MyProject.Repositories.Repositories
 {
-    public class ClaimRepository : IclaimRepository
+   public class ClaimRepository : IClaimRepository
     {
         private readonly IContext _context;
 
         public ClaimRepository(IContext context)
         {
             _context = context;
+        } 
+
+        public async Task<Claim> AddAsync(int id, int roleId, int  permissionId,EPolicy ePolicy)
+        {
+            var c = _context.Claims.Add(new Claim() { Id = id, RoleId=roleId,PermissionId=permissionId,Policy=ePolicy});
+            await _context.SaveGangesAsync();
+            return c.Entity;
+        }
+        public async Task DeleteAsync(int id)
+        {
+            _context.Claims.Remove(GetByIdAsync(id).Result);
+            await _context.SaveGangesAsync();
         }
 
-        public Claim Add(int id, int roleId, int  permissionId,EPolicy ePolicy)
+        public async Task<List<Claim>> GetAllAsync()
         {
-            Claim c = new Claim() { Id = id, RoleId=roleId,PermissionId=permissionId,Policy=ePolicy};
-            _context.Claims.Add(c);
-            return c;
+            return await _context.Claims.ToListAsync();
         }
 
-  
-
-
-        public void Delete(int id)
+        public async Task<Claim> GetByIdAsync(int id)
         {
-            _context.Claims.Remove(GetById(id));
+            return await _context.Claims.FindAsync(id);
         }
 
-        public List<Claim> GetAll()
+        public async Task<Claim> Update(Claim claim)
         {
-            return _context.Claims;
-        }
-
-        public Claim GetById(int id)
-        {
-            return _context.Claims.Find(c => c.Id == id);
-        }
-
-        public Claim Update(Claim claim)
-        {
-            Claim c1 = GetById(claim.Id);
+            Claim c1 = GetByIdAsync(claim.Id).Result;
             c1.RoleId = claim.RoleId;
             c1.PermissionId = claim.PermissionId;
             c1.Policy = claim.Policy;
+            await _context.SaveGangesAsync();
             return c1;
         }
     }

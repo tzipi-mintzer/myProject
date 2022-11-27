@@ -20,5 +20,6 @@ namespace MyProject.Repositories.Entities
             return $"Role: Id = {Id}, Name = {Name}";
         }
 
+  
     }
 }

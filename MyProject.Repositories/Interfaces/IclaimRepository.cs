@@ -7,16 +7,16 @@ using System.Threading.Tasks;
 
 namespace MyProject.Repositories.Interfaces
 {
-    public interface IclaimRepository
+    public interface IClaimRepository
     {
-        List<Claim> GetAll();
+        Task<List<Claim>> GetAllAsync();
 
-        Claim GetById(int id);
+        Task<Claim> GetByIdAsync(int id);
 
-        Claim Add(int id, int roleId, int permissionId, EPolicy ePolicy);
+        Task<Claim> AddAsync(int id, int roleId, int permissionId, EPolicy ePolicy);
 
-        Claim Update(Claim Claim);
+        Task<Claim> UpdateAsync(Claim Claim);
 
-        void Delete(int id);
+        Task DeleteAsync(int id);
     }
 }

@@ -7,17 +7,17 @@ using System.Threading.Tasks;
 
 namespace MyProject.Repositories.Interfaces
 {
-    public interface IpermissionRepository
+    public interface IPermissionRepository
     {
-        List<Permission> GetAll();
+        Task<List<Permission>> GetAllAsync();
 
-        Permission GetById(int id);
+        Task<Permission> GetByIdAsync(int id);
 
-        Permission Add(int id, string name, string description);
+        Task<Permission> AddAsync(int id, string name, string description);
 
-        Permission Update(Permission Permission);
+        Task<Permission> UpdateAsync(Permission Permission);
 
-        void Delete(int id);
+        Task DeleteAsync(int id);
        
     }
 }
