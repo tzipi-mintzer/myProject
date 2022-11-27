@@ -1,9 +1,10 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using MyProject.Common;
 using MyProject.Mock;
-using MyProject.Repositories.Entities;
-using MyProject.Repositories.Interfaces;
-using MyProject.Repositories.Repositories;
+using MyProject.Services.Interfaces;
+using MyProject.webAPI.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,22 +17,34 @@ namespace MyProject.webAPI.Controllers
     [ApiController]
     public class ClaimController : ControllerBase
     {
-        private readonly IClaimRepository _claimRepository;
-   
-
-        public ClaimController(IClaimRepository claimRepository)
+        private readonly IMapper _mapper;
+        private readonly IClaimService _claimService;
+        public ClaimController(IClaimService claimService, IMapper mapper)
         {
-            _claimRepository = claimRepository;
+
+            _claimService = claimService;
+            _mapper = mapper;
         }
         [HttpGet]
-        public List<Claim> Get()
+        public async Task<List<ClaimDTO>> Get()
         {
-            return _claimRepository.GetAll();
+            return await _claimService.GetAllAsync();
         }
         [HttpGet("{id}")]
-        public Claim Get(int id)
+        public async Task<ClaimDTO> Get(int id)
         {
-            return _claimRepository.GetById(id);
+            return await _claimService.GetByIdAsync(id);
+        }
+        [HttpPut]
+        public async Task<ClaimDTO> Update([FromBody] ClaimModel model)
+        {
+            return await _claimService.UpdateAsync(new ClaimDTO() { Id = model.Id,RoleId=model.RoleId,PermissionId=model.PermissionId,Policy= (Common.EPolicyDTO)model.Policy});
+        }
+        [HttpPost]
+        public async Task<ClaimDTO> Post([FromBody] ClaimModel model)
+        {
+            ClaimDTO p = await _claimService.AddAsync(model.Id, model.RoleId,  model.PermissionId, (Common.EPolicyDTO)model.Policy);
+            return p;
         }
     }
 }

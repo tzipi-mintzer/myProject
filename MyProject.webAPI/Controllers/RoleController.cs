@@ -2,8 +2,6 @@
 using Microsoft.AspNetCore.Mvc;
 using MyProject.Common;
 using MyProject.Mock;
-using MyProject.Repositories.Interfaces;
-using MyProject.Repositories.Repositories;
 using MyProject.Services.Interfaces;
 using MyProject.webAPI.Models;
 using System;

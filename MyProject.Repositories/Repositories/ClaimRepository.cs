@@ -40,7 +40,7 @@ namespace MyProject.Repositories.Repositories
             return await _context.Claims.FindAsync(id);
         }
 
-        public async Task<Claim> Update(Claim claim)
+        public async Task<Claim> UpdateAsync(Claim claim)
         {
             Claim c1 = GetByIdAsync(claim.Id).Result;
             c1.RoleId = claim.RoleId;
@@ -49,5 +49,7 @@ namespace MyProject.Repositories.Repositories
             await _context.SaveGangesAsync();
             return c1;
         }
+
+      
     }
 }

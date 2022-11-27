@@ -1,4 +1,5 @@
-﻿using MyProject.Repositories.Entities;
+﻿using Microsoft.EntityFrameworkCore;
+using MyProject.Repositories.Entities;
 using MyProject.Repositories.Interfaces;
 using System;
 using System.Collections.Generic;
@@ -8,11 +9,15 @@ using System.Threading.Tasks;
 
 namespace MyProject.Mock
 {
-    public class MockContext : IContext
+    public class MockContext: IContext
     {
         public List<Role> Roles { get; set; }//פה יהיו הנתונים מטבלת roles
         public List<Permission> Permissions { get; set; }
         public List<Claim> Claims { get; set; }
+        //מימוש הממשק
+        DbSet<Role> IContext.Roles { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+        DbSet<Permission> IContext.Permissions { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+        DbSet<Claim> IContext.Claims { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
 
         public MockContext()
         {
@@ -34,6 +39,11 @@ namespace MyProject.Mock
             Claims.Add(new Claim { Id = 3, RoleId = 2, PermissionId = 1, Policy = EPolicy.Deny });
             Claims.Add(new Claim { Id = 4, RoleId = 2, PermissionId = 2, Policy = EPolicy.Allow });
 
+        }
+
+        public Task<int> SaveGangesAsync()
+        {
+            throw new NotImplementedException();
         }
     }
 }
