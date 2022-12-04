@@ -22,14 +22,14 @@ namespace MyProject.Repositories.Repositories
         {
             var r = _context.Roles.Add(new Role() { Id = id, Name = name, Description = description });
 
-            await _context.SaveGangesAsync();
+            await _context.SaveChangesAsync();
             return r.Entity;
         }
 
         public async Task DeleteAsync(int id)
         {
             _context.Roles.Remove(GetByIdAsync(id).Result);
-            await _context.SaveGangesAsync();
+            await _context.SaveChangesAsync();
         }
 
         public async Task<List<Role>> GetAllAsync()
@@ -47,7 +47,7 @@ namespace MyProject.Repositories.Repositories
             Role r1 = GetByIdAsync(role.Id).Result;
             r1.Name = role.Name;
             r1.Description = role.Description;
-            await _context.SaveGangesAsync();
+            await _context.SaveChangesAsync();
             return r1;
 
         }

@@ -7,6 +7,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
+using MyProject.Context;
 using MyProject.Mock;
 using MyProject.Repositories.Interfaces;
 using MyProject.Repositories.Repositories;
@@ -20,8 +21,8 @@ namespace MyProject.webAPI
 {
     public class Startup
     {
-        
-        public string MyAllowSpecificOrigins { get; set; }= "_myAllowSpecificOrigins";
+
+        public string MyAllowSpecificOrigins { get; set; } = "_myAllowSpecificOrigins";
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
@@ -41,14 +42,15 @@ namespace MyProject.webAPI
                                   });
             });
 
-           
+
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "MyProject.webAPI", Version = "v1" });
             });
             services.AddScoped<IRoleRepository, RoleRepository>();
-            services.AddSingleton<IContext, MockContext>();
-            services.AddScoped<IPermissionRepository,PermissionRepository>();
+            // services.AddSingleton<IContext, MockContext>();
+            services.AddDbContext<IContext, MyDbContext>();
+            services.AddScoped<IPermissionRepository, PermissionRepository>();
             services.AddScoped<IClaimRepository, ClaimRepository>();
             services.AddAutoMapper(typeof(Mapping));
             services.AddControllers();

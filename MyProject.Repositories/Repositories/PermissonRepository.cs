@@ -21,14 +21,14 @@ namespace MyProject.Repositories.Repositories
         public async Task<Permission> AddAsync(int id, string name, string description)
         {
             var p = _context.Permissions.Add(new Permission() { Id = id, Name = name, Description = description });
-            await _context.SaveGangesAsync();
+            await _context.SaveChangesAsync();
             return p.Entity;
         }
 
         public async Task DeleteAsync(int id)
         {
             _context.Permissions.Remove(GetByIdAsync(id).Result);
-            await _context.SaveGangesAsync();
+            await _context.SaveChangesAsync();
         }
 
         public async Task<List<Permission>> GetAllAsync()
@@ -46,7 +46,7 @@ namespace MyProject.Repositories.Repositories
             Permission r1 = GetByIdAsync(Permission.Id).Result;
             r1.Name = Permission.Name;
             r1.Description = Permission.Description;
-            await _context.SaveGangesAsync();
+            await _context.SaveChangesAsync();
             return r1;
         }
     }
